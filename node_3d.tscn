@@ -1,0 +1,66 @@
+[gd_scene load_steps=11 format=3 uid="uid://0wtybs01dep4"]
+
+[ext_resource type="Material" uid="uid://csgpl3ko4i08b" path="res://green.tres" id="1_b3lwk"]
+[ext_resource type="Script" path="res://camera.gd" id="2_o62de"]
+[ext_resource type="Script" path="res://stikThinghy.gd" id="2_x6col"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iuooh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gb7ld"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ribj7"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kuosn"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ejvfe"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ge6t8"]
+radius = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_tn8rb"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="floor" type="StaticBody3D" parent="."]
+disable_mode = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0438622, 0.261465, -0.159142)
+shape = SubResource("BoxShape3D_iuooh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
+transform = Transform3D(120, 0, 0, 0, 3, 0, 0, 0, 120, -0.114563, -1.13685, 0.690094)
+material_override = ExtResource("1_b3lwk")
+mesh = SubResource("BoxMesh_gb7ld")
+surface_material_override/0 = SubResource("StandardMaterial3D_ribj7")
+
+[node name="ball" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+disable_mode = 2
+physics_material_override = SubResource("PhysicsMaterial_kuosn")
+script = ExtResource("2_x6col")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ball"]
+mesh = SubResource("SphereMesh_ejvfe")
+
+[node name="ballmesh" type="CollisionShape3D" parent="ball"]
+shape = SubResource("SphereShape3D_ge6t8")
+
+[node name="Camera3D" type="Camera3D" parent="ball"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5, 0)
+fov = 90.0
+script = ExtResource("2_o62de")
+
+[node name="Scaler" type="Marker3D" parent="ball"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.01, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ball/Scaler"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.5)
+mesh = SubResource("QuadMesh_tn8rb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5054, 46.9898, 45.8932)
+
+[connection signal="input_event" from="ball" to="ball" method="_on_input_event"]
